@@ -194,11 +194,21 @@
   border-radius: 3px;
   font-weight: 600;
   font-size: 14px;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
 }
 
-.run-btn:hover:not(:disabled) { transform: translateY(-1px); }
-.run-btn:disabled { opacity: 0.6; cursor: default; }
+.run-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(63, 167, 150, 0.25);
+}
+.run-btn:active:not(:disabled) { transform: translateY(0); }
+.run-btn:disabled { opacity: 0.75; cursor: default; }
+
+.thinking-dots {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 4px;
+}
 
 .ledger.empty {
   display: flex;
