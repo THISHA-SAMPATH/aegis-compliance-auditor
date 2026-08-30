@@ -54,12 +54,36 @@ and adds the accountability check none of those protocols perform.
   (sponsorship, margin, true fit score, price history) a real agent has
   access to and a user does not
 
+## Live Agent Mode
+
+Toggling "Live Agent Mode" in the header routes the purchase decision
+through `api/agent-decide.js`, a Vercel serverless function that calls
+Claude directly. The agent is instructed the way a real commercial shopping
+agent is — encouraged to favor sponsored/partner listings when reasonably
+competitive — so any bias Aegis catches is genuine model behavior, not a
+dial. If the backend call fails (no key configured, offline dev), it falls
+back to the local simulated agent automatically so the demo never breaks.
+
+To enable it after deploying to Vercel: add an `ANTHROPIC_API_KEY`
+environment variable in the project's Vercel settings, redeploy.
+
+## AP2-shaped mandate
+
+`src/lib/ap2.js` shapes the user's stated intent as an AP2-style Intent
+Mandate (issuer, `credentialSubject` with constraints, a mock signature) —
+the same envelope shape AP2 already standardizes. Swapping the mock
+signature for a real AP2 client/wallet integration is additive, not a
+rewrite.
+
+## Audit history
+
+Every audit is persisted to `localStorage` (`aegis-audit-history-v1`) so
+the trail survives a refresh — the seed of a real per-user trust ledger.
+
 ## Roadmap beyond the hackathon build
 
-- [ ] Swap the mock agent for a real LLM-driven shopping agent call, so the
-      bias is emergent rather than dialed in
-- [ ] Ingest real AP2 Intent/Cart Mandates instead of the local `intent` object
-- [ ] Persist an audit history per user as a real trust ledger, not session-only
+- [ ] Move audit history from localStorage to a real per-user backend store
+- [ ] Real AP2 wallet/key integration in place of the mock signature
 - [ ] Publish an aggregate "Agent Integrity Score" per platform from accumulated
       audit data
 
