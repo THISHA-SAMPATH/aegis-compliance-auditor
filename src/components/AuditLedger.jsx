@@ -37,6 +37,13 @@ export default function AuditLedger({ result, intent }) {
         <Stamp verdict={audit.verdict} />
       </div>
 
+      {audit.agentReasoning && (
+        <div className="agent-quote">
+          <div className="panel-eyebrow">What the agent told the user</div>
+          <p>&ldquo;{audit.agentReasoning}&rdquo;</p>
+        </div>
+      )}
+
       <ul className="evidence">
         {audit.evidence.map((e, i) => (
           <li key={i} className={e.ok ? 'ok' : 'bad'}>

@@ -39,6 +39,47 @@
   border-bottom: 1px solid var(--line-strong);
 }
 
+.mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.mode-toggle input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--verified);
+}
+
+.status-note {
+  font-size: 12px;
+  color: var(--flagged);
+  background: var(--flagged-bg);
+  border: 1px solid var(--flagged);
+  border-radius: 3px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.agent-quote {
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  background: var(--ink);
+  border-left: 2px solid var(--line-strong);
+  border-radius: 2px;
+}
+
+.agent-quote p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
 .grid {
   display: grid;
   grid-template-columns: minmax(280px, 380px) 1fr;

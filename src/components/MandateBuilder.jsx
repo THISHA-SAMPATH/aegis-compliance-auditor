@@ -1,4 +1,4 @@
-export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, running }) {
+export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, running, liveMode }) {
   return (
     <section className="panel mandate">
       <div className="panel-eyebrow">01 — Mandate</div>
@@ -52,24 +52,32 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
 
       <div className="divider" />
 
-      <div className="field">
-        <span>Simulated platform incentive strength</span>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={bias}
-          onChange={(e) => setBias(Number(e.target.value))}
-        />
-        <div className="bias-readout mono">
-          {bias}% — {bias < 20 ? 'mostly neutral agent' : bias < 60 ? 'moderately incentive-driven' : 'heavily incentive-driven'}
-        </div>
+      {liveMode ? (
         <p className="hint">
-          This dial stands in for what a real platform's agent optimizes for
-          internally. You can't see this number in production — Aegis infers
-          the effect of it from the purchase alone.
+          Live Agent Mode is on — a real Claude call will make the purchase
+          decision. Its incentive to favor sponsored listings is instructed
+          in the backend prompt, not dialed in here, so any bias you see is
+          genuine model behavior.
         </p>
-      </div>
+      ) : (
+        <div className="field">
+          <span>Simulated platform incentive strength</span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={bias}
+            onChange={(e) => setBias(Number(e.target.value))}
+          />
+          <div className="bias-readout mono">
+            {bias}% — {bias < 20 ? 'mostly neutral agent' : bias < 60 ? 'moderately incentive-driven' : 'heavily incentive-driven'}
+          </div>
+          <p className="hint">
+            This dial stands in for what a real platform's agent optimizes
+            for internally, for offline demos without a deployed backend.
+          </p>
+        </div>
+      )}
 
       <button className="run-btn" onClick={onRun} disabled={running}>
         {running ? 'Agent is shopping…' : 'Let the agent buy it'}
