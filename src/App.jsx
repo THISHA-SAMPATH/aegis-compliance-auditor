@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import MandateBuilder from './components/MandateBuilder';
 import AuditLedger from './components/AuditLedger';
 import { CATALOG, DEFAULT_INTENT } from './data/marketplace';
@@ -72,22 +73,37 @@ function App() {
   return (
     <div className="app-shell">
       <header className="site-header">
-        <div className="wordmark">
+        <motion.div
+          className="wordmark"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        >
           <span className="wordmark-mark">Æ</span>
           <span>AEGIS</span>
-        </div>
-        <p className="site-tagline">
+        </motion.div>
+        <motion.p
+          className="site-tagline"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
           Payment protocols verify an agent was <em>authorized</em> to buy.
           Aegis verifies it actually <em>honored</em> what you asked for.
-        </p>
-        <label className="mode-toggle mono">
+        </motion.p>
+        <motion.label
+          className="mode-toggle mono"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <input
             type="checkbox"
             checked={liveMode}
             onChange={(e) => setLiveMode(e.target.checked)}
           />
           Live Agent Mode — let a real Claude call make the purchase decision
-        </label>
+        </motion.label>
       </header>
 
       <main className="grid">

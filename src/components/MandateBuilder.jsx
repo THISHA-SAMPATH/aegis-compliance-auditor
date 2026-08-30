@@ -1,6 +1,29 @@
+import { motion, AnimatePresence } from 'framer-motion';
+
+function ThinkingDots() {
+  return (
+    <span className="thinking-dots">
+      {[0, 1, 2].map((i) => (
+        <motion.span
+          key={i}
+          animate={{ opacity: [0.25, 1, 0.25] }}
+          transition={{ duration: 1, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
+        >
+          •
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, running, liveMode }) {
   return (
-    <section className="panel mandate">
+    <motion.section
+      className="panel mandate"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+    >
       <div className="panel-eyebrow">01 — Mandate</div>
       <h2 className="panel-title">Your intent, on record</h2>
       <p className="panel-sub">
@@ -80,8 +103,23 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
       )}
 
       <button className="run-btn" onClick={onRun} disabled={running}>
-        {running ? 'Agent is shopping…' : 'Let the agent buy it'}
+        <AnimatePresence mode="wait">
+          {running ? (
+            <motion.span
+              key="running"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              Agent is shopping <ThinkingDots />
+            </motion.span>
+          ) : (
+            <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              Let the agent buy it
+            </motion.span>
+          )}
+        </AnimatePresence>
       </button>
-    </section>
+    </motion.section>
   );
 }
