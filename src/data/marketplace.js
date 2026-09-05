@@ -174,15 +174,14 @@ export const CATALOG = [
   },
 ];
 
-function formatCategoryLabel(category) {
-  const words = category.split('-');
-  const lastWord = words.pop();
-  const leadingWords = words.join('-');
-  return `${leadingWords.charAt(0).toUpperCase()}${leadingWords.slice(1)} ${lastWord}`;
-}
-
-export const CATEGORIES = [...new Set(CATALOG.map((product) => product.category))].map(
-  (value) => ({ value, label: formatCategoryLabel(value) }),
+export const CATEGORIES = [...new Set(CATALOG.map((p) => p.category))].map(
+  (value) => ({
+    value,
+    label: value
+      .split('-')
+      .map((w) => w[0].toUpperCase() + w.slice(1))
+      .join(' '),
+  }),
 );
 
 const DELIVERY_LABELS = {
@@ -193,7 +192,7 @@ const DELIVERY_LABELS = {
 
 export function createCategoryQuery(category, maxPrice, mustArriveBy) {
   const categoryLabel =
-    CATEGORIES.find((item) => item.value === category)?.label || formatCategoryLabel(category);
+    CATEGORIES.find((item) => item.value === category)?.label || category;
   const arrivalLabel = DELIVERY_LABELS[mustArriveBy] || 'the selected date';
   return `${categoryLabel} under $${maxPrice} that arrive by ${arrivalLabel}`;
 }

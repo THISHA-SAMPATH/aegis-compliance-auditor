@@ -24,8 +24,8 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
             });
           }}
         >
-          {CATEGORIES.map(({ value, label }) => (
-            <option key={value} value={value}>{label}</option>
+          {CATEGORIES.map((c) => (
+            <option key={c.value} value={c.value}>{c.label}</option>
           ))}
         </select>
       </label>
