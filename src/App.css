@@ -88,7 +88,9 @@
 }
 
 @media (max-width: 820px) {
-  .grid { grid-template-columns: 1fr; }
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .panel {
@@ -130,8 +132,8 @@
   color: var(--text-dim);
 }
 
-.field input[type='text'],
-.field input[type='number'],
+.field input[type="text"],
+.field input[type="number"],
 .field input:not([type]),
 .field select {
   background: var(--ink);
@@ -142,7 +144,7 @@
   font-size: 14px;
 }
 
-.field input[type='range'] {
+.field input[type="range"] {
   accent-color: var(--flagged);
 }
 
@@ -194,11 +196,18 @@
   border-radius: 3px;
   font-weight: 600;
   font-size: 14px;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
 }
 
-.run-btn:hover:not(:disabled) { transform: translateY(-1px); }
-.run-btn:disabled { opacity: 0.6; cursor: default; }
+.run-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.run-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
 
 .ledger.empty {
   display: flex;
@@ -228,8 +237,14 @@
   transform: rotate(-4deg);
 }
 
-.stamp-verified { color: var(--verified); background: var(--verified-bg); }
-.stamp-flagged { color: var(--flagged); background: var(--flagged-bg); }
+.stamp-verified {
+  color: var(--verified);
+  background: var(--verified-bg);
+}
+.stamp-flagged {
+  color: var(--flagged);
+  background: var(--flagged-bg);
+}
 
 .evidence {
   list-style: none;
@@ -248,7 +263,10 @@
   border-bottom: 1px solid var(--line);
 }
 
-.evidence li:last-child { border-bottom: none; padding-bottom: 0; }
+.evidence li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
 
 .evidence-mark {
   font-size: 11px;
@@ -260,8 +278,14 @@
   margin-top: 2px;
 }
 
-.evidence li.ok .evidence-mark { color: var(--verified); background: var(--verified-bg); }
-.evidence li.bad .evidence-mark { color: var(--flagged); background: var(--flagged-bg); }
+.evidence li.ok .evidence-mark {
+  color: var(--verified);
+  background: var(--verified-bg);
+}
+.evidence li.bad .evidence-mark {
+  color: var(--flagged);
+  background: var(--flagged-bg);
+}
 
 .evidence-label {
   font-size: 14px;
@@ -306,8 +330,12 @@
   color: var(--text-dim);
 }
 
-.history-row .ok { color: var(--verified); }
-.history-row .bad { color: var(--flagged); }
+.history-row .ok {
+  color: var(--verified);
+}
+.history-row .bad {
+  color: var(--flagged);
+}
 
 .site-footer {
   margin-top: 40px;
