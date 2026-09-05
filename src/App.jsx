@@ -51,8 +51,20 @@ function App() {
   const isViewingPastResult = Boolean(result && history[0] && result !== history[0]);
 
   useEffect(() => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+    if (history.length > 0) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+    } else {
+      localStorage.removeItem(HISTORY_KEY);
+    }
   }, [history]);
+
+  function handleClearHistory() {
+    if (!window.confirm('Clear all saved audit history?')) return;
+
+    localStorage.removeItem(HISTORY_KEY);
+    setHistory([]);
+    setResult(null);
+  }
 
   async function handleRun() {
     setRunning(true);
@@ -146,9 +158,14 @@ function App() {
         </section>
       )}
 
-      {history.length > 1 && (
+      {history.length > 0 && (
         <section className="panel history">
+          <div className="history-head">
           <div className="panel-eyebrow">03 — Audit trail (persisted locally)</div>
+            <button className="clear-history-btn" type="button" onClick={handleClearHistory}>
+              Clear history
+            </button>
+          </div>
           <div className="history-rows">
             {history.slice(1).map((h, i) => (
               <button

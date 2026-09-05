@@ -363,6 +363,34 @@
   margin-top: 20px;
 }
 
+.history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.history-head .panel-eyebrow {
+  margin-bottom: 0;
+}
+
+.clear-history-btn {
+  padding: 6px 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.clear-history-btn:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
 .integrity-score {
   display: flex;
   align-items: center;
