@@ -114,13 +114,11 @@ function App() {
         </nav>
         <span className="header-status mono">Verification ready</span>
         <div className="wordmark">
-          <span className="wordmark-mark">Æ</span>
+          <span className="wordmark-mark" aria-hidden="true">A</span>
           <span>AEGIS</span>
         </div>
-        <p className="site-tagline">
-          Payment protocols verify an agent was <em>authorized</em> to buy.
-          Aegis verifies it actually <em>honored</em> what you asked for.
-        </p>
+        <p className="site-tagline">Agents should honor<br />your <em>intent.</em></p>
+        <p className="hero-copy">Aegis makes autonomous purchases accountable. Set a mandate, let an agent act, and get independent proof that it followed your rules.</p>
         <label className="mode-toggle mono">
           <input
             type="checkbox"
@@ -129,23 +127,36 @@ function App() {
           />
           Live Agent Mode — let a real Claude call make the purchase decision
         </label>
+        <div className="hero-cta-row">
+          <a className="hero-primary" href="#mandate">Create a mandate <span>→</span></a>
+          <a className="hero-secondary" href="#how-it-works">How it works</a>
+        </div>
         <div className="hero-shapes" aria-hidden="true">
           <span className="shape shape-blue" />
           <span className="shape shape-green" />
           <span className="shape shape-pink" />
           <span className="shape shape-yellow" />
+          <div className="hero-preview">
+            <div className="preview-bar"><span /> <span /> <span /></div>
+            <div className="preview-body">
+              <div className="preview-rail"><i /><i /><i /><i /></div>
+              <div className="preview-content">
+                <div className="preview-kicker">Purchase audit</div>
+                <div className="preview-heading"><strong>Noise-cancelling<br />headphones</strong><b>COMPLIANT</b></div>
+                <div className="preview-metrics"><span><i>96</i> mandate match</span><span><i>0</i> hidden incentives</span></div>
+                <div className="preview-lines"><b /><b /><b /></div>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
       <div className="trust-ticker" aria-label="Aegis safeguards">
-        <span>Intent verified</span>
-        <span>Sponsored-placement aware</span>
-        <span>Independent audit trail</span>
-        <span>Intent verified</span>
-        <span>Sponsored-placement aware</span>
+        <span>Intent verified</span><span>Independent evidence</span><span>Incentives revealed</span>
+        <span>Purchase audit trail</span><span>Intent verified</span><span>Independent evidence</span>
       </div>
 
-      <main className="grid">
+      <main className="grid" id="mandate">
         <MandateBuilder
           intent={intent}
           setIntent={setIntent}
@@ -207,7 +218,7 @@ function App() {
         </section>
       )}
 
-      <footer className="site-footer">
+      <footer className="site-footer" id="how-it-works">
         <p>
           Mandates are shaped as AP2-style Intent Mandates — Aegis is built
           to sit on top of that existing infrastructure, not replace it.
