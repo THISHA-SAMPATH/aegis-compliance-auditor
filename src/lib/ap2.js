@@ -30,6 +30,7 @@ export function buildIntentMandate(intent, userId = 'user-thisha-demo') {
       mustArriveBy: intent.mustArriveBy,
       preference: intent.preference,
       avoidSponsored: intent.avoidSponsored,
+      avoidPriceManipulation: intent.avoidPriceManipulation,
     },
   };
 

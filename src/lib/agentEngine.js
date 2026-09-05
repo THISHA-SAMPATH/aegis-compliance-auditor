@@ -5,10 +5,13 @@
 // hard constraints (price cap, arrival date). `bias` (0..1) controls how
 // much weight the agent gives to sponsorship/margin over genuine fit.
 import { computeIntentFit } from "./intentMatch";
+import { priceIsInflatedThenDiscounted } from "./auditEngine";
 
 export function runAgentPurchase(catalog, intent, bias) {
   const eligible = catalog.filter(
-    (p) => p.category === intent.category && p.price <= intent.maxPrice,
+    (p) => p.category === intent.category
+      && p.price <= intent.maxPrice
+      && (!intent.avoidPriceManipulation || !priceIsInflatedThenDiscounted(p)),
   );
 
   const scored = eligible.map((p) => {

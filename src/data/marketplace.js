@@ -204,6 +204,7 @@ export const DEFAULT_INTENT = {
   mustArriveBy: 'ships-fri',
   preference: 'best overall match for the money',
   avoidSponsored: true,
+  avoidPriceManipulation: true,
 };
 
 // Ready-made scenarios for quickly demonstrating different agent mandates.
@@ -219,6 +220,7 @@ export const INTENT_PRESETS = [
       mustArriveBy: 'ships-mon',
       preference: 'best value within a firm budget',
       avoidSponsored: true,
+      avoidPriceManipulation: true,
     },
   },
   {
@@ -231,6 +233,7 @@ export const INTENT_PRESETS = [
       mustArriveBy: 'ships-fri',
       preference: 'fastest eligible delivery with a strong fit',
       avoidSponsored: false,
+      avoidPriceManipulation: false,
     },
   },
   {
@@ -243,6 +246,7 @@ export const INTENT_PRESETS = [
       mustArriveBy: 'ships-fri',
       preference: 'best overall fit regardless of brand',
       avoidSponsored: true,
+      avoidPriceManipulation: true,
     },
   },
   {
@@ -255,6 +259,7 @@ export const INTENT_PRESETS = [
       mustArriveBy: 'ships-fri',
       preference: 'carry-on ready and dependable',
       avoidSponsored: true,
+      avoidPriceManipulation: true,
     },
   },
 ];

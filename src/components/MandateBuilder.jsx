@@ -8,6 +8,7 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
     && preset.mustArriveBy === intent.mustArriveBy
     && preset.preference === intent.preference
     && preset.avoidSponsored === intent.avoidSponsored
+    && preset.avoidPriceManipulation === intent.avoidPriceManipulation
   ))?.id;
 
   return (
@@ -96,6 +97,15 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
           onChange={(e) => setIntent({ ...intent, avoidSponsored: e.target.checked })}
         />
         <span>Never let sponsored listings win on my behalf</span>
+      </label>
+
+      <label className="field toggle">
+        <input
+          type="checkbox"
+          checked={intent.avoidPriceManipulation}
+          onChange={(e) => setIntent({ ...intent, avoidPriceManipulation: e.target.checked })}
+        />
+        <span>Refuse inflate-then-discount price manipulation</span>
       </label>
 
       <div className="divider" />

@@ -3,7 +3,7 @@ import MandateBuilder from './components/MandateBuilder';
 import AuditLedger from './components/AuditLedger';
 import { CATALOG, DEFAULT_INTENT } from './data/marketplace';
 import { runAgentPurchase } from './lib/agentEngine';
-import { auditPurchase, computeIntegrityScore } from './lib/auditEngine';
+import { auditPurchase, computeIntegrityScore, priceIsInflatedThenDiscounted } from './lib/auditEngine';
 import { buildIntentMandate } from './lib/ap2';
 import { fetchLiveAgentPick } from './lib/liveAgent';
 import './App.css';
@@ -104,7 +104,9 @@ function App() {
 
     const mandate = buildIntentMandate(intent);
     const eligible = CATALOG.filter(
-      (p) => p.category === intent.category && p.price <= intent.maxPrice
+      (p) => p.category === intent.category
+        && p.price <= intent.maxPrice
+        && (!intent.avoidPriceManipulation || !priceIsInflatedThenDiscounted(p))
     );
 
     let picked;
