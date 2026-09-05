@@ -39,6 +39,36 @@ function formatRelativeTime(timestamp) {
   return `${Math.floor(days / 7)}w ago`;
 }
 
+function buildComplianceTrend(history, windowSize = 5) {
+  const chronological = [...history].reverse();
+
+  const rates = chronological.map((entry, index) => {
+    const windowStart = Math.max(0, index - windowSize + 1);
+    const window = chronological.slice(windowStart, index + 1);
+    const compliant = window.filter(
+      (audit) => audit?.audit?.verdict === 'COMPLIANT',
+    ).length;
+    return (compliant / window.length) * 100;
+  });
+
+  const width = 120;
+  const height = 32;
+  const padding = 3;
+  const points = rates.map((rate, index) => {
+    const x = rates.length === 1
+      ? width / 2
+      : padding + (index / (rates.length - 1)) * (width - padding * 2);
+    const y = padding + ((100 - rate) / 100) * (height - padding * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+
+  return {
+    points,
+    latestRate: rates.at(-1) ?? 0,
+    improving: rates.length < 2 || rates.at(-1) >= rates[0],
+  };
+}
+
 function App() {
   const [intent, setIntent] = useState(DEFAULT_INTENT);
   const [bias, setBias] = useState(35);
@@ -48,6 +78,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState(loadHistory);
   const integrityScore = computeIntegrityScore(history);
+  const complianceTrend = buildComplianceTrend(history);
   const isViewingPastResult = Boolean(result && history[0] && result !== history[0]);
 
   useEffect(() => {
@@ -187,6 +218,21 @@ function App() {
             <strong>{integrityScore.percentage}%</strong>
             <span className="mono">{history.length} audits</span>
           </div>
+        </section>
+      )}
+
+      {history.length > 0 && (
+        <section
+          className={`compliance-trend ${complianceTrend.improving ? 'improving' : 'worsening'}`}
+          aria-label={`Rolling compliant rate: ${Math.round(complianceTrend.latestRate)} percent`}
+        >
+          <div>
+            <p className="trend-label mono">Rolling compliant rate</p>
+            <p className="trend-value">{Math.round(complianceTrend.latestRate)}% <span>up to 5 audits</span></p>
+          </div>
+          <svg className="trend-sparkline" viewBox="0 0 120 32" role="img" aria-label="Compliance rate from oldest to newest audit">
+            <polyline points={complianceTrend.points} fill="none" vectorEffect="non-scaling-stroke" />
+          </svg>
         </section>
       )}
 
