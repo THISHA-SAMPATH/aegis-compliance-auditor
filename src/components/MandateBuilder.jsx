@@ -1,3 +1,5 @@
+import { CATEGORY_DEFAULTS } from '../data/marketplace';
+
 export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, running, liveMode }) {
   return (
     <section className="panel mandate">
@@ -7,6 +9,18 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
         This is what you're authorizing an agent to act on. Aegis audits every
         purchase against exactly this — nothing the agent claims later.
       </p>
+
+      <label className="field">
+        <span>Product category</span>
+        <select
+          className="mono"
+          value={intent.category}
+          onChange={(e) => setIntent({ ...intent, ...CATEGORY_DEFAULTS[e.target.value] })}
+        >
+          <option value="trail-running-shoes">Trail-running shoes</option>
+          <option value="wireless-earbuds">Wireless earbuds</option>
+        </select>
+      </label>
 
       <label className="field">
         <span>Shopping intent</span>
