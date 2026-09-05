@@ -205,3 +205,56 @@ export const DEFAULT_INTENT = {
   preference: 'best overall match for the money',
   avoidSponsored: true,
 };
+
+// Ready-made scenarios for quickly demonstrating different agent mandates.
+// Each `intent` value deliberately follows the same shape as DEFAULT_INTENT.
+export const INTENT_PRESETS = [
+  {
+    id: 'budget-shopper',
+    label: 'Budget shopper',
+    intent: {
+      category: 'trail-running-shoes',
+      query: createCategoryQuery('trail-running-shoes', 120, 'ships-mon'),
+      maxPrice: 120,
+      mustArriveBy: 'ships-mon',
+      preference: 'best value within a firm budget',
+      avoidSponsored: true,
+    },
+  },
+  {
+    id: 'fast-delivery',
+    label: 'Fast delivery priority',
+    intent: {
+      category: 'wireless-earbuds',
+      query: createCategoryQuery('wireless-earbuds', 150, 'ships-fri'),
+      maxPrice: 150,
+      mustArriveBy: 'ships-fri',
+      preference: 'fastest eligible delivery with a strong fit',
+      avoidSponsored: false,
+    },
+  },
+  {
+    id: 'brand-agnostic',
+    label: 'Brand-agnostic, avoid sponsored',
+    intent: {
+      category: 'smart-home-speakers',
+      query: createCategoryQuery('smart-home-speakers', 130, 'ships-fri'),
+      maxPrice: 130,
+      mustArriveBy: 'ships-fri',
+      preference: 'best overall fit regardless of brand',
+      avoidSponsored: true,
+    },
+  },
+  {
+    id: 'travel-ready',
+    label: 'Travel-ready essentials',
+    intent: {
+      category: 'travel-backpacks',
+      query: createCategoryQuery('travel-backpacks', 145, 'ships-fri'),
+      maxPrice: 145,
+      mustArriveBy: 'ships-fri',
+      preference: 'carry-on ready and dependable',
+      avoidSponsored: true,
+    },
+  },
+];

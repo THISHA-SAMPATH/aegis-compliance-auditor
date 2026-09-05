@@ -1,6 +1,15 @@
-import { CATEGORIES, createCategoryQuery } from '../data/marketplace';
+import { CATEGORIES, createCategoryQuery, INTENT_PRESETS } from '../data/marketplace';
 
 export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, running, liveMode }) {
+  const activePreset = INTENT_PRESETS.find(({ intent: preset }) => (
+    preset.category === intent.category
+    && preset.query === intent.query
+    && preset.maxPrice === intent.maxPrice
+    && preset.mustArriveBy === intent.mustArriveBy
+    && preset.preference === intent.preference
+    && preset.avoidSponsored === intent.avoidSponsored
+  ))?.id;
+
   return (
     <section className="panel mandate">
       <div className="panel-eyebrow">01 — Mandate</div>
@@ -9,6 +18,23 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
         This is what you're authorizing an agent to act on. Aegis audits every
         purchase against exactly this — nothing the agent claims later.
       </p>
+
+      <div className="mandate-presets" aria-label="Mandate presets">
+        <span className="preset-label mono">Try a scenario</span>
+        <div className="preset-buttons">
+          {INTENT_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              className={`preset-btn ${activePreset === preset.id ? 'active' : ''}`}
+              type="button"
+              aria-pressed={activePreset === preset.id}
+              onClick={() => setIntent({ ...preset.intent })}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <label className="field">
         <span>Product category</span>
