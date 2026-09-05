@@ -7,7 +7,7 @@ function Stamp({ verdict }) {
   );
 }
 
-export default function AuditLedger({ result, intent }) {
+export default function AuditLedger({ result, intent, isViewingPastResult, onBackToLatest }) {
   if (!result) {
     return (
       <section className="panel ledger empty">
@@ -26,6 +26,12 @@ export default function AuditLedger({ result, intent }) {
   return (
     <section className="panel ledger">
       <div className="panel-eyebrow">02 — Audit</div>
+      {isViewingPastResult && (
+        <div className="past-result-notice">
+          <span className="mono">Viewing past result</span>
+          <button type="button" onClick={onBackToLatest}>Back to latest</button>
+        </div>
+      )}
       <div className="ledger-head">
         <div>
           <h2 className="panel-title">{agentPick.name}</h2>

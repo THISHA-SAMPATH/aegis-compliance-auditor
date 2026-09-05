@@ -28,6 +28,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState(loadHistory);
   const integrityScore = computeIntegrityScore(history);
+  const isViewingPastResult = Boolean(result && history[0] && result !== history[0]);
 
   useEffect(() => {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
@@ -103,7 +104,12 @@ function App() {
         />
         <div>
           {statusNote && <div className="status-note mono">{statusNote}</div>}
-          <AuditLedger result={result} intent={intent} />
+          <AuditLedger
+            result={result}
+            intent={intent}
+            isViewingPastResult={isViewingPastResult}
+            onBackToLatest={() => setResult(history[0])}
+          />
         </div>
       </main>
 
@@ -125,13 +131,18 @@ function App() {
           <div className="panel-eyebrow">03 — Audit trail (persisted locally)</div>
           <div className="history-rows">
             {history.slice(1).map((h, i) => (
-              <div className="history-row mono" key={i}>
+              <button
+                className="history-row mono"
+                key={i}
+                type="button"
+                onClick={() => setResult(h)}
+              >
                 <span className={h.audit.verdict === 'COMPLIANT' ? 'ok' : 'bad'}>
                   {h.audit.verdict}
                 </span>
                 <span>{h.agentPick.name}</span>
                 <span>{h.mode === 'live' ? 'live agent' : `sim bias ${h.bias}%`}</span>
-              </div>
+              </button>
             ))}
           </div>
         </section>
