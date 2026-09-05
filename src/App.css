@@ -411,7 +411,7 @@
 
 .history-row {
   display: grid;
-  grid-template-columns: 100px 1fr auto;
+  grid-template-columns: 100px 1fr auto auto;
   gap: 12px;
   width: 100%;
   padding: 8px 10px;
@@ -422,6 +422,12 @@
   font-size: 12px;
   color: var(--text-dim);
   transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.history-time {
+  color: var(--text-dim);
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .history-row:hover {

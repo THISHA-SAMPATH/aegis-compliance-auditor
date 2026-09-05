@@ -19,6 +19,26 @@ function loadHistory() {
   }
 }
 
+function formatRelativeTime(timestamp) {
+  const elapsedSeconds = Math.max(
+    0,
+    Math.floor((Date.now() - new Date(timestamp).getTime()) / 1000),
+  );
+
+  if (elapsedSeconds < 60) return 'just now';
+
+  const minutes = Math.floor(elapsedSeconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+
+  return `${Math.floor(days / 7)}w ago`;
+}
+
 function App() {
   const [intent, setIntent] = useState(DEFAULT_INTENT);
   const [bias, setBias] = useState(35);
@@ -142,6 +162,7 @@ function App() {
                 </span>
                 <span>{h.agentPick.name}</span>
                 <span>{h.mode === 'live' ? 'live agent' : `sim bias ${h.bias}%`}</span>
+                <span className="history-time mono">{formatRelativeTime(h.at)}</span>
               </button>
             ))}
           </div>
