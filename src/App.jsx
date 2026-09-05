@@ -106,6 +106,13 @@ function App() {
   return (
     <div className="app-shell">
       <header className="site-header">
+        <nav className="site-nav" aria-label="Primary navigation">
+          <span className="active">Mandate</span>
+          <span>Audit</span>
+          <span>Integrity</span>
+          <span>History</span>
+        </nav>
+        <span className="header-status mono">Verification ready</span>
         <div className="wordmark">
           <span className="wordmark-mark">Æ</span>
           <span>AEGIS</span>
@@ -122,7 +129,21 @@ function App() {
           />
           Live Agent Mode — let a real Claude call make the purchase decision
         </label>
+        <div className="hero-shapes" aria-hidden="true">
+          <span className="shape shape-blue" />
+          <span className="shape shape-green" />
+          <span className="shape shape-pink" />
+          <span className="shape shape-yellow" />
+        </div>
       </header>
+
+      <div className="trust-ticker" aria-label="Aegis safeguards">
+        <span>Intent verified</span>
+        <span>Sponsored-placement aware</span>
+        <span>Independent audit trail</span>
+        <span>Intent verified</span>
+        <span>Sponsored-placement aware</span>
+      </div>
 
       <main className="grid">
         <MandateBuilder

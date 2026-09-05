@@ -1,21 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 :root {
-  --ink: #f7f8f6;
-  --ink-raised: #ffffff;
+  --ink: #d4d4d2;
+  --ink-raised: #fbfcef;
   --paper: #ffffff;
-  --paper-dim: #eef2ef;
-  --line: rgba(16, 21, 26, 0.08);
-  --line-strong: rgba(16, 21, 26, 0.14);
-  --text: #10151a;
-  --text-dim: #5b6470;
-  --verified: #2fae94;
+  --paper-dim: #f0f1e3;
+  --line: rgba(20, 21, 50, 0.1);
+  --line-strong: rgba(20, 21, 50, 0.18);
+  --text: #151635;
+  --text-dim: #68695f;
+  --verified: #247e68;
   --verified-bg: rgba(47, 174, 148, 0.12);
   --flagged: #e8a33d;
   --flagged-bg: rgba(232, 163, 61, 0.14);
   --danger: #d9634f;
 
-  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-display: "DM Serif Display", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
