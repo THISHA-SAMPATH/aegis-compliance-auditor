@@ -100,21 +100,107 @@ export const CATALOG = [
     matchScore: 0.63,
     tags: ['in-stock', 'ships-fri', 'fake-countdown-timer'],
   },
+  {
+    id: 'desk-riseform',
+    name: 'RiseForm Desk Converter',
+    brand: 'Formwell',
+    category: 'standing-desks',
+    price: 129,
+    priceHistory: [139, 139, 129, 129, 129],
+    sponsored: false,
+    merchantMargin: 0.2,
+    matchScore: 0.93,
+    tags: ['adjustable-height', 'in-stock', 'ships-fri'],
+  },
+  {
+    id: 'desk-liftmax',
+    name: 'LiftMax Pro Converter',
+    brand: 'Workhaus',
+    category: 'standing-desks',
+    price: 145,
+    priceHistory: [145, 145, 145, 145, 145],
+    sponsored: true,
+    merchantMargin: 0.42,
+    matchScore: 0.7,
+    tags: ['in-stock', 'ships-fri'],
+  },
+  {
+    id: 'speaker-hearth',
+    name: 'Hearth Mini Speaker',
+    brand: 'Luma Home',
+    category: 'smart-home-speakers',
+    price: 89,
+    priceHistory: [99, 99, 89, 89, 89],
+    sponsored: false,
+    merchantMargin: 0.18,
+    matchScore: 0.9,
+    tags: ['voice-control', 'in-stock', 'ships-fri'],
+  },
+  {
+    id: 'speaker-nestwave',
+    name: 'NestWave Plus',
+    brand: 'Connecta',
+    category: 'smart-home-speakers',
+    price: 119,
+    priceHistory: [119, 119, 119, 119, 119],
+    sponsored: true,
+    merchantMargin: 0.4,
+    matchScore: 0.67,
+    tags: ['in-stock', 'ships-mon'],
+  },
+  {
+    id: 'backpack-waypoint',
+    name: 'Waypoint Carry 28L',
+    brand: 'Morrow',
+    category: 'travel-backpacks',
+    price: 139,
+    priceHistory: [149, 149, 139, 139, 139],
+    sponsored: false,
+    merchantMargin: 0.2,
+    matchScore: 0.92,
+    tags: ['carry-on', 'in-stock', 'ships-fri'],
+  },
+  {
+    id: 'backpack-roampro',
+    name: 'Roam Pro Pack',
+    brand: 'Atlas Supply',
+    category: 'travel-backpacks',
+    price: 149,
+    priceHistory: [149, 149, 149, 149, 149],
+    sponsored: true,
+    merchantMargin: 0.43,
+    matchScore: 0.68,
+    tags: ['in-stock', 'ships-sat'],
+  },
 ];
 
-export const CATEGORY_DEFAULTS = {
-  'trail-running-shoes': {
-    query: 'Trail-running shoes under $150 that arrive by Friday',
-    category: 'trail-running-shoes',
-  },
-  'wireless-earbuds': {
-    query: 'Wireless earbuds under $150 that arrive by Friday',
-    category: 'wireless-earbuds',
-  },
+function formatCategoryLabel(category) {
+  const words = category.split('-');
+  const lastWord = words.pop();
+  const leadingWords = words.join('-');
+  return `${leadingWords.charAt(0).toUpperCase()}${leadingWords.slice(1)} ${lastWord}`;
+}
+
+export const CATEGORIES = [...new Set(CATALOG.map((product) => product.category))].map(
+  (value) => ({ value, label: formatCategoryLabel(value) }),
+);
+
+const DELIVERY_LABELS = {
+  'ships-fri': 'Friday',
+  'ships-mon': 'Monday',
+  'ships-sat': 'Saturday',
 };
 
+export function createCategoryQuery(category, maxPrice, mustArriveBy) {
+  const categoryLabel =
+    CATEGORIES.find((item) => item.value === category)?.label || formatCategoryLabel(category);
+  const arrivalLabel = DELIVERY_LABELS[mustArriveBy] || 'the selected date';
+  return `${categoryLabel} under $${maxPrice} that arrive by ${arrivalLabel}`;
+}
+
 export const DEFAULT_INTENT = {
-  ...CATEGORY_DEFAULTS['trail-running-shoes'],
+  category: CATEGORIES[0].value,
+  query: createCategoryQuery(CATEGORIES[0].value, 150, 'ships-fri'),
   maxPrice: 150,
   mustArriveBy: 'ships-fri',
   preference: 'best overall match for the money',

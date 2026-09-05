@@ -1,4 +1,4 @@
-import { CATEGORY_DEFAULTS } from '../data/marketplace';
+import { CATEGORIES, createCategoryQuery } from '../data/marketplace';
 
 export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, running, liveMode }) {
   return (
@@ -15,10 +15,18 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
         <select
           className="mono"
           value={intent.category}
-          onChange={(e) => setIntent({ ...intent, ...CATEGORY_DEFAULTS[e.target.value] })}
+          onChange={(e) => {
+            const category = e.target.value;
+            setIntent({
+              ...intent,
+              category,
+              query: createCategoryQuery(category, intent.maxPrice, intent.mustArriveBy),
+            });
+          }}
         >
-          <option value="trail-running-shoes">Trail-running shoes</option>
-          <option value="wireless-earbuds">Wireless earbuds</option>
+          {CATEGORIES.map(({ value, label }) => (
+            <option key={value} value={value}>{label}</option>
+          ))}
         </select>
       </label>
 
