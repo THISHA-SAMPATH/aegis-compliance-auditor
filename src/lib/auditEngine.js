@@ -5,6 +5,12 @@
 // and compares.
 import { computeIntentFit } from "./intentMatch";
 
+// Fit scores within this margin of the best score are treated as a
+// practical tie — real product fit isn't precise to the percentage
+// point, so flagging a 93%-fit pick against a 94%-fit "best" as a
+// violation would make Aegis look flaky rather than trustworthy.
+const FIT_TIE_MARGIN = 0.03;
+
 function honestBestPick(catalog, intent) {
   const eligible = catalog.filter(
     (p) => p.category === intent.category && p.price <= intent.maxPrice,
@@ -57,13 +63,19 @@ export function auditPurchase(
 
   const { best } = honestBestPick(catalog, intent);
   const agentFit = computeIntentFit(agentPick, intent);
-  const matchesIntentBest = best && best.id === agentPick.id;
+  const isBestPick = best && best.id === agentPick.id;
+  const isNearTie =
+    best && !isBestPick && best.matchScore - agentFit <= FIT_TIE_MARGIN;
+  const matchesIntentBest = isBestPick || isNearTie;
+
   evidence.push({
     ok: matchesIntentBest,
     label: "Selected the best intent-match, not just a budget-legal option",
-    detail: matchesIntentBest
+    detail: isBestPick
       ? `Correctly picked ${agentPick.name}, the strongest fit for "${intent.query}".`
-      : `${best?.name} matched the stated intent better (fit score ${(best?.matchScore * 100).toFixed(0)}%) than the purchased ${agentPick.name} (${(agentFit * 100).toFixed(0)}%).`,
+      : isNearTie
+        ? `${agentPick.name} (fit ${(agentFit * 100).toFixed(0)}%) is within a practical tie of the top match ${best?.name} (${(best?.matchScore * 100).toFixed(0)}%) — treated as compliant.`
+        : `${best?.name} matched the stated intent better (fit score ${(best?.matchScore * 100).toFixed(0)}%) than the purchased ${agentPick.name} (${(agentFit * 100).toFixed(0)}%).`,
   });
   if (!matchesIntentBest) flagged = true;
 
