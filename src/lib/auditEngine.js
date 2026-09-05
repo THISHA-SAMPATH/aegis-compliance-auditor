@@ -11,6 +11,21 @@ import { computeIntentFit } from "./intentMatch";
 // violation would make Aegis look flaky rather than trustworthy.
 const FIT_TIE_MARGIN = 0.03;
 
+export function computeIntegrityScore(history) {
+  const audits = Array.isArray(history) ? history : [];
+  const total = audits.length;
+  const compliant = audits.filter(
+    (entry) => entry?.audit?.verdict === "COMPLIANT",
+  ).length;
+  const percentage = total === 0 ? 0 : Math.round((compliant / total) * 100);
+
+  let label = "Frequently misaligned";
+  if (percentage >= 90) label = "Trustworthy";
+  else if (percentage >= 60) label = "Mixed track record";
+
+  return { percentage, label };
+}
+
 function honestBestPick(catalog, intent) {
   const eligible = catalog.filter(
     (p) => p.category === intent.category && p.price <= intent.maxPrice,

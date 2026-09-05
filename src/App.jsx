@@ -3,7 +3,7 @@ import MandateBuilder from './components/MandateBuilder';
 import AuditLedger from './components/AuditLedger';
 import { CATALOG, DEFAULT_INTENT } from './data/marketplace';
 import { runAgentPurchase } from './lib/agentEngine';
-import { auditPurchase } from './lib/auditEngine';
+import { auditPurchase, computeIntegrityScore } from './lib/auditEngine';
 import { buildIntentMandate } from './lib/ap2';
 import { fetchLiveAgentPick } from './lib/liveAgent';
 import './App.css';
@@ -27,6 +27,7 @@ function App() {
   const [statusNote, setStatusNote] = useState(null);
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState(loadHistory);
+  const integrityScore = computeIntegrityScore(history);
 
   useEffect(() => {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
@@ -105,6 +106,19 @@ function App() {
           <AuditLedger result={result} intent={intent} />
         </div>
       </main>
+
+      {history.length >= 3 && (
+        <section className="panel integrity-score" aria-label="Agent Integrity Score">
+          <div>
+            <div className="panel-eyebrow">Agent integrity score</div>
+            <p className="integrity-label">{integrityScore.label}</p>
+          </div>
+          <div className="integrity-value">
+            <strong>{integrityScore.percentage}%</strong>
+            <span className="mono">{history.length} audits</span>
+          </div>
+        </section>
+      )}
 
       {history.length > 1 && (
         <section className="panel history">
