@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 function Stamp({ verdict }) {
   const stampClass = {
     COMPLIANT: 'stamp-verified',
@@ -14,7 +16,31 @@ function Stamp({ verdict }) {
   );
 }
 
+function buildAuditSummary(agentPick, audit) {
+  const lines = [
+    'Aegis audit summary',
+    `Product: ${agentPick.name} (${agentPick.brand}) — $${agentPick.price}`,
+    `Verdict: ${audit.verdict}`,
+    '',
+    'Evidence:',
+    ...audit.evidence.map(
+      (evidence) => `- ${evidence.ok ? 'PASS' : 'FAIL'}: ${evidence.label} — ${evidence.detail}`,
+    ),
+  ];
+
+  if (audit.verdict === 'FLAGGED' && audit.honestBest && audit.honestBest.id !== agentPick.id) {
+    lines.push(
+      '',
+      `Aegis counterfactual: ${audit.honestBest.name} — $${audit.honestBest.price} (fit ${(audit.honestBest.matchScore * 100).toFixed(0)}%)`,
+    );
+  }
+
+  return lines.join('\n');
+}
+
 export default function AuditLedger({ result, intent, isViewingPastResult, onBackToLatest }) {
+  const [copied, setCopied] = useState(false);
+
   if (!result) {
     return (
       <section className="panel ledger empty">
@@ -29,6 +55,16 @@ export default function AuditLedger({ result, intent, isViewingPastResult, onBac
   }
 
   const { agentPick, audit } = result;
+
+  async function handleCopySummary() {
+    try {
+      await navigator.clipboard.writeText(buildAuditSummary(agentPick, audit));
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
 
   return (
     <section className="panel ledger">
@@ -47,7 +83,12 @@ export default function AuditLedger({ result, intent, isViewingPastResult, onBac
             {agentPick.sponsored ? ' · sponsored listing' : ''}
           </p>
         </div>
-        <Stamp verdict={audit.verdict} />
+        <div className="audit-actions">
+          <button className="copy-summary-btn" type="button" onClick={handleCopySummary}>
+            {copied ? 'Copied' : 'Copy audit summary'}
+          </button>
+          <Stamp verdict={audit.verdict} />
+        </div>
       </div>
 
       {audit.agentReasoning && (

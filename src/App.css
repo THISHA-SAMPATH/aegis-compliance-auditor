@@ -280,6 +280,33 @@
   margin-bottom: 22px;
 }
 
+.audit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.copy-summary-btn {
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  background: var(--paper);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.copy-summary-btn:hover {
+  border-color: var(--verified);
+  background: var(--verified-bg);
+  color: var(--verified);
+}
+
 .past-result-notice {
   display: flex;
   align-items: center;
@@ -580,6 +607,7 @@
   .panel { padding: 22px; }
   .field-row, .evidence { grid-template-columns: 1fr; }
   .ledger-head { flex-direction: column; }
+  .audit-actions { justify-content: flex-start; }
   .stamp { align-self: flex-start; }
   .integrity-score { align-items: flex-start; flex-direction: column; }
   .compliance-trend { margin-right: 14px; margin-left: 14px; }
