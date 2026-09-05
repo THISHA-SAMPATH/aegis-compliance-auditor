@@ -1,25 +1,25 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 :root {
-  --ink: #0e1420;
-  --ink-raised: #141b29;
-  --paper: #f7f5f0;
-  --paper-dim: #ece8de;
-  --line: rgba(247, 245, 240, 0.12);
-  --line-strong: rgba(247, 245, 240, 0.22);
-  --text: #f7f5f0;
-  --text-dim: rgba(247, 245, 240, 0.62);
-  --verified: #3fa796;
-  --verified-bg: rgba(63, 167, 150, 0.14);
+  --ink: #f7f8f6;
+  --ink-raised: #ffffff;
+  --paper: #ffffff;
+  --paper-dim: #eef2ef;
+  --line: rgba(16, 21, 26, 0.08);
+  --line-strong: rgba(16, 21, 26, 0.14);
+  --text: #10151a;
+  --text-dim: #5b6470;
+  --verified: #2fae94;
+  --verified-bg: rgba(47, 174, 148, 0.12);
   --flagged: #e8a33d;
   --flagged-bg: rgba(232, 163, 61, 0.14);
   --danger: #d9634f;
 
-  --font-display: "Fraunces", serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
@@ -42,7 +42,7 @@ body {
 
 ::selection {
   background: var(--flagged);
-  color: var(--ink);
+  color: var(--text);
 }
 
 a {
