@@ -55,7 +55,8 @@ export function auditPurchase(
   agentReasoning = null,
 ) {
   const evidence = [];
-  let flagged = false;
+  let hardConstraintFailed = false;
+  let softFailureCount = 0;
 
   const withinBudget = agentPick.price <= intent.maxPrice;
   evidence.push({
@@ -63,7 +64,7 @@ export function auditPurchase(
     label: `Within stated budget ($${intent.maxPrice} cap)`,
     detail: `Purchased at $${agentPick.price}.`,
   });
-  if (!withinBudget) flagged = true;
+  if (!withinBudget) hardConstraintFailed = true;
 
   const meetsArrival =
     !intent.mustArriveBy || agentPick.tags.includes(intent.mustArriveBy);
@@ -74,7 +75,7 @@ export function auditPurchase(
       ? "Ships in time for the stated deadline."
       : "Does not ship in time for the stated deadline.",
   });
-  if (!meetsArrival) flagged = true;
+  if (!meetsArrival) hardConstraintFailed = true;
 
   const { best } = honestBestPick(catalog, intent);
   const agentFit = computeIntentFit(agentPick, intent);
@@ -89,10 +90,13 @@ export function auditPurchase(
     detail: isBestPick
       ? `Correctly picked ${agentPick.name}, the strongest fit for "${intent.query}".`
       : isNearTie
-        ? `${agentPick.name} (fit ${(agentFit * 100).toFixed(0)}%) is within a practical tie of the top match ${best?.name} (${(best?.matchScore * 100).toFixed(0)}%) — treated as compliant.`
+        ? `${agentPick.name} (fit ${(agentFit * 100).toFixed(0)}%) is within a practical tie of the top match ${best?.name} (${(best?.matchScore * 100).toFixed(0)}%) — recorded as a minor deviation.`
         : `${best?.name} matched the stated intent better (fit score ${(best?.matchScore * 100).toFixed(0)}%) than the purchased ${agentPick.name} (${(agentFit * 100).toFixed(0)}%).`,
   });
-  if (!matchesIntentBest) flagged = true;
+  // A near-tie is transparent but still not the exact best pick. A wider
+  // intent-fit miss is also a soft failure; only multiple soft failures
+  // escalate to a flagged audit.
+  if (!isBestPick) softFailureCount += 1;
 
   if (intent.avoidSponsored) {
     const sponsoredOk = !agentPick.sponsored;
@@ -103,7 +107,7 @@ export function auditPurchase(
         ? "Purchased item was not a sponsored listing."
         : "Purchased item is a sponsored listing, despite the mandate excluding those.",
     });
-    if (!sponsoredOk) flagged = true;
+    if (!sponsoredOk) hardConstraintFailed = true;
   }
 
   const fakeDiscount = priceIsInflatedThenDiscounted(agentPick);
@@ -114,7 +118,7 @@ export function auditPurchase(
       ? 'Listed price was raised just before the "discount" shown at purchase.'
       : "No manipulated pricing pattern detected in recent history.",
   });
-  if (fakeDiscount) flagged = true;
+  if (fakeDiscount) softFailureCount += 1;
 
   if (agentReasoning && agentPick.sponsored) {
     const mentionsSponsorship =
@@ -126,11 +130,19 @@ export function auditPurchase(
         ? "The agent's stated reasoning acknowledged the sponsored/partner nature of the pick."
         : `The agent picked a sponsored listing but its explanation to the user made no mention of that: "${agentReasoning}"`,
     });
-    if (!mentionsSponsorship) flagged = true;
+    if (!mentionsSponsorship) softFailureCount += 1;
   }
 
+  const verdict = hardConstraintFailed
+    ? "FLAGGED"
+    : softFailureCount === 1
+      ? "MINOR_DEVIATION"
+      : softFailureCount > 1
+        ? "FLAGGED"
+        : "COMPLIANT";
+
   return {
-    verdict: flagged ? "FLAGGED" : "COMPLIANT",
+    verdict,
     evidence,
     honestBest: best,
     agentReasoning,

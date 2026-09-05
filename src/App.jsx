@@ -206,7 +206,13 @@ function App() {
                 type="button"
                 onClick={() => setResult(h)}
               >
-                <span className={h.audit.verdict === 'COMPLIANT' ? 'ok' : 'bad'}>
+                <span className={
+                  h.audit.verdict === 'COMPLIANT'
+                    ? 'ok'
+                    : h.audit.verdict === 'MINOR_DEVIATION'
+                      ? 'minor'
+                      : 'bad'
+                }>
                   {h.audit.verdict}
                 </span>
                 <span>{h.agentPick.name}</span>

@@ -1,8 +1,15 @@
 function Stamp({ verdict }) {
-  const compliant = verdict === 'COMPLIANT';
+  const stampClass = {
+    COMPLIANT: 'stamp-verified',
+    MINOR_DEVIATION: 'stamp-minor',
+    FLAGGED: 'stamp-flagged',
+  }[verdict] || 'stamp-flagged';
+
+  const label = verdict === 'MINOR_DEVIATION' ? 'MINOR DEVIATION' : verdict;
+
   return (
-    <div className={`stamp ${compliant ? 'stamp-verified' : 'stamp-flagged'}`}>
-      <span>{compliant ? 'COMPLIANT' : 'FLAGGED'}</span>
+    <div className={`stamp ${stampClass}`}>
+      <span>{label}</span>
     </div>
   );
 }
@@ -62,7 +69,7 @@ export default function AuditLedger({ result, intent, isViewingPastResult, onBac
         ))}
       </ul>
 
-      {audit.verdict === 'FLAGGED' && audit.honestBest && audit.honestBest.id !== agentPick.id && (
+      {audit.verdict !== 'COMPLIANT' && audit.honestBest && audit.honestBest.id !== agentPick.id && (
         <div className="counterfactual">
           <div className="panel-eyebrow">What Aegis would have picked</div>
           <div className="counterfactual-row">

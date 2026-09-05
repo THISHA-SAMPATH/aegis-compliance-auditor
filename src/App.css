@@ -284,6 +284,11 @@
   color: #ffffff;
   background: var(--verified);
 }
+.stamp-minor {
+  color: #5639a7;
+  background: #ece7ff;
+  border-color: #cfc2ff;
+}
 .stamp-flagged {
   color: var(--flagged);
   background: var(--flagged-bg);
@@ -469,6 +474,9 @@
 
 .history-row .ok {
   color: var(--verified);
+}
+.history-row .minor {
+  color: #6a4ec4;
 }
 .history-row .bad {
   color: var(--flagged);
