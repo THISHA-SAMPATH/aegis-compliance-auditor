@@ -1,5 +1,7 @@
 # Aegis — Independent Mandate Compliance Auditor
 
+> Payment protocols verify an agent was **authorized** to buy. Aegis verifies it actually **honored** what you asked for.
+
 **Track:** AI Growth & Agentic Commerce
 
 > Payment protocols like Google's AP2, Visa's Trusted Agent Protocol, and
@@ -30,8 +32,23 @@ financial auditor doesn't trust the books, they re-derive the numbers.
    production this is invisible; you only see the receipt.
 3. **Independent audit** — Aegis re-ranks the same catalog using only the
    stated mandate (no sponsorship/margin signal), and issues a verdict:
-   **COMPLIANT** or **FLAGGED**, with a plain-language evidence trail and,
-   when flagged, the pick Aegis would have made instead.
+   **COMPLIANT**, **MINOR_DEVIATION**, or **FLAGGED**, with a plain-language
+   evidence trail and the pick Aegis would have made instead when the outcome
+   deviates from the mandate.
+
+Hard constraints (budget, delivery deadline, required sponsored-listing
+avoidance, and price-manipulation avoidance) always produce **FLAGGED**.
+A single soft concern, such as a near-tie intent-fit miss, produces
+**MINOR_DEVIATION** so the audit can be honest without being noisy.
+
+## Trust and verifiability
+
+Every rendered audit includes a **Verify this audit** SHA-256 evidence hash.
+The hash is calculated in-browser from the selected product, verdict, and
+evidence JSON, giving reviewers a compact tamper-evident reference for the
+result they are seeing. It is deliberately a demo-scale proof primitive; a
+production system would persist the signed evidence bundle and anchor its hash
+to an independent ledger or verifier.
 
 ## Why this, and not another agent-payments wrapper
 
@@ -48,8 +65,8 @@ and adds the accountability check none of those protocols perform.
 - `src/lib/agentEngine.js` — simulates a shopping agent whose ranking blends
   genuine fit against sponsorship/margin, controlled by a bias dial
 - `src/lib/auditEngine.js` — Aegis's independent audit: budget check,
-  delivery check, intent-fit check, sponsored-listing check, and a
-  price-manipulation check (inflate-then-discount pattern detection)
+  delivery check, intent-fit check, sponsored-listing check, tiered verdicts,
+  and an inflate-then-discount price-manipulation detector
 - `src/data/marketplace.js` — mock product catalog with the hidden signals
   (sponsorship, margin, true fit score, price history) a real agent has
   access to and a user does not
@@ -75,10 +92,20 @@ the same envelope shape AP2 already standardizes. Swapping the mock
 signature for a real AP2 client/wallet integration is additive, not a
 rewrite.
 
+## Demo scenarios
+
+The mandate builder includes ready-made scenarios for budget, delivery, and
+sponsorship preferences. The **Pitch demo: concealed incentive** preset is the
+deliberate screenshot moment: one click runs an agent selection of a sponsored
+product whose price was inflated before being discounted, while the agent's
+reasoning omits both facts. Aegis surfaces the resulting **FLAGGED** audit,
+evidence trail, counterfactual pick, and verification hash.
+
 ## Audit history
 
 Every audit is persisted to `localStorage` (`aegis-audit-history-v1`) so
-the trail survives a refresh — the seed of a real per-user trust ledger.
+the trail survives a refresh — the seed of a real per-user trust ledger. The
+UI also shows a rolling COMPLIANT-rate sparkline across that local history.
 
 ## Roadmap beyond the hackathon build
 

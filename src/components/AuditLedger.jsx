@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Stamp({ verdict }) {
   const stampClass = {
@@ -36,6 +36,48 @@ function buildAuditSummary(agentPick, audit) {
   }
 
   return lines.join('\n');
+}
+
+function VerificationLink({ audit, productId }) {
+  const [evidenceHash, setEvidenceHash] = useState('Calculating…');
+
+  useEffect(() => {
+    let cancelled = false;
+    const evidenceJson = JSON.stringify({
+      productId,
+      verdict: audit.verdict,
+      evidence: audit.evidence,
+    });
+
+    async function hashEvidence() {
+      try {
+        const bytes = new TextEncoder().encode(evidenceJson);
+        const digest = await crypto.subtle.digest('SHA-256', bytes);
+        const hash = Array.from(new Uint8Array(digest))
+          .map((byte) => byte.toString(16).padStart(2, '0'))
+          .join('');
+        if (!cancelled) setEvidenceHash(hash);
+      } catch {
+        if (!cancelled) setEvidenceHash('Unavailable');
+      }
+    }
+
+    hashEvidence();
+    return () => { cancelled = true; };
+  }, [audit, productId]);
+
+  const shortHash = evidenceHash.length === 64 ? `${evidenceHash.slice(0, 12)}…` : evidenceHash;
+
+  return (
+    <a
+      className="verify-audit-link mono"
+      href="#audit-verification"
+      title={`SHA-256 of this audit evidence: ${evidenceHash}`}
+      aria-label={`Verify this audit. SHA-256 evidence hash: ${evidenceHash}`}
+    >
+      Verify this audit <code>{shortHash}</code>
+    </a>
+  );
 }
 
 export default function AuditLedger({ result, intent, isViewingPastResult, onBackToLatest }) {
@@ -87,7 +129,10 @@ export default function AuditLedger({ result, intent, isViewingPastResult, onBac
           <button className="copy-summary-btn" type="button" onClick={handleCopySummary}>
             {copied ? 'Copied' : 'Copy audit summary'}
           </button>
-          <Stamp verdict={audit.verdict} />
+          <div className="audit-verification">
+            <Stamp verdict={audit.verdict} />
+            <VerificationLink audit={audit} productId={agentPick.id} />
+          </div>
         </div>
       </div>
 

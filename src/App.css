@@ -282,10 +282,34 @@
 
 .audit-actions {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.audit-verification {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.verify-audit-link {
+  color: var(--text-dim);
+  font-size: 9px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.verify-audit-link:hover {
+  color: #2926a8;
+  text-decoration: underline;
+}
+
+.verify-audit-link code {
+  color: inherit;
+  font: inherit;
 }
 
 .copy-summary-btn {
@@ -608,6 +632,7 @@
   .field-row, .evidence { grid-template-columns: 1fr; }
   .ledger-head { flex-direction: column; }
   .audit-actions { justify-content: flex-start; }
+  .audit-verification { align-items: flex-start; }
   .stamp { align-self: flex-start; }
   .integrity-score { align-items: flex-start; flex-direction: column; }
   .compliance-trend { margin-right: 14px; margin-left: 14px; }
@@ -825,8 +850,8 @@
 }
 
 /* Product-led hero refinements */
-.site-header { min-height: 470px; }
-.site-tagline { margin-top: 72px; max-width: 510px; }
+.site-header { min-height: 530px; }
+.site-tagline { margin-top: 72px; max-width: 590px; font-size: clamp(30px, 3.3vw, 47px); line-height: 0.98; }
 .hero-copy { position: relative; z-index: 2; max-width: 390px; margin: 18px 0 0; color: #5e6059; font-size: 13px; line-height: 1.55; }
 .mode-toggle { position: absolute; right: 64px; bottom: 25px; margin: 0; color: #4c4e46; background: rgba(255,255,255,.64); border: 1px solid rgba(21,22,53,.1); box-shadow: none; }
 .hero-cta-row { position: relative; z-index: 3; display: flex; align-items: center; gap: 18px; margin-top: 22px; }
@@ -841,5 +866,5 @@
 .preview-body { display: grid; grid-template-columns: 66px 1fr; height: calc(100% - 24px); }.preview-rail { display: flex; flex-direction: column; gap: 17px; padding: 19px 0 0 17px; border-right: 1px solid #ececf0; }.preview-rail i { width: 25px; height: 5px; border-radius: 6px; background: #dedee7; }.preview-rail i:first-child { background: #8b87ed; }.preview-content { padding: 24px 27px; }
 .preview-kicker { color: #78788c; font-family: var(--font-mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }.preview-heading { display: flex; align-items: end; justify-content: space-between; gap: 15px; margin-top: 11px; }.preview-heading strong { color: #222244; font-family: var(--font-body); font-size: 22px; line-height: 1.05; letter-spacing: -.055em; }.preview-heading b { padding: 5px 7px; border-radius: 4px; background: #d9f2e8; color: #187559; font-family: var(--font-mono); font-size: 8px; }.preview-metrics { display: flex; gap: 30px; margin: 19px 0; color: #797a86; font-size: 9px; }.preview-metrics span { display: flex; flex-direction: column; gap: 2px; }.preview-metrics i { color: #26265e; font-size: 19px; font-style: normal; font-weight: 700; }.preview-lines { display: grid; gap: 8px; }.preview-lines b { display: block; height: 8px; border-radius: 4px; background: #f0f0f4; }.preview-lines b:nth-child(2) { width: 77%; background: #e6e6f5; }.preview-lines b:nth-child(3) { width: 53%; }
 .trust-ticker span::before { content: "✦"; }
-@media (max-width: 820px) { .site-header { min-height: 520px; }.site-tagline { margin-top: 100px; }.mode-toggle { right: 28px; bottom: 18px; }.hero-preview { right: -60px; width: 490px; opacity: .88; }.compliance-trend { margin-right: 20px; margin-left: 20px; } }
-@media (max-width: 560px) { .site-header { min-height: 590px; }.site-tagline { margin-top: 88px; }.hero-copy { max-width: 310px; }.hero-cta-row { margin-top: 18px; }.mode-toggle { right: auto; left: 20px; bottom: 16px; max-width: 275px; }.hero-preview { right: -115px; bottom: 56px; width: 410px; height: 190px; }.preview-content { padding: 18px; }.preview-heading strong { font-size: 17px; }.preview-metrics { margin: 12px 0; } }
+@media (max-width: 820px) { .site-header { min-height: 570px; }.site-tagline { margin-top: 100px; }.mode-toggle { right: 28px; bottom: 18px; }.hero-preview { right: -60px; width: 490px; opacity: .88; }.compliance-trend { margin-right: 20px; margin-left: 20px; } }
+@media (max-width: 560px) { .site-header { min-height: 650px; }.site-tagline { margin-top: 88px; font-size: 35px; }.hero-copy { max-width: 310px; }.hero-cta-row { margin-top: 18px; }.mode-toggle { right: auto; left: 20px; bottom: 16px; max-width: 275px; }.hero-preview { right: -115px; bottom: 56px; width: 410px; height: 190px; }.preview-content { padding: 18px; }.preview-heading strong { font-size: 17px; }.preview-metrics { margin: 12px 0; } }

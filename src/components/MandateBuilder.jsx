@@ -1,6 +1,6 @@
 import { CATEGORIES, createCategoryQuery, INTENT_PRESETS } from '../data/marketplace';
 
-export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, running, liveMode }) {
+export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun, onSelectPreset, running, liveMode }) {
   const activePreset = INTENT_PRESETS.find(({ intent: preset }) => (
     preset.category === intent.category
     && preset.query === intent.query
@@ -29,7 +29,10 @@ export default function MandateBuilder({ intent, setIntent, bias, setBias, onRun
               className={`preset-btn ${activePreset === preset.id ? 'active' : ''}`}
               type="button"
               aria-pressed={activePreset === preset.id}
-              onClick={() => setIntent({ ...preset.intent })}
+              onClick={() => {
+                if (onSelectPreset) onSelectPreset(preset);
+                else setIntent({ ...preset.intent });
+              }}
             >
               {preset.label}
             </button>

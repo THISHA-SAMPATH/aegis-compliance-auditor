@@ -97,23 +97,27 @@ function App() {
     setResult(null);
   }
 
-  async function handleRun() {
+  async function handleRun(intentToRun = intent, demo = null) {
     setRunning(true);
     setResult(null);
     setStatusNote(null);
 
-    const mandate = buildIntentMandate(intent);
+    const mandate = buildIntentMandate(intentToRun);
     const eligible = CATALOG.filter(
-      (p) => p.category === intent.category
-        && p.price <= intent.maxPrice
-        && (!intent.avoidPriceManipulation || !priceIsInflatedThenDiscounted(p))
+      (p) => p.category === intentToRun.category
+        && p.price <= intentToRun.maxPrice
+        && (!intentToRun.avoidPriceManipulation || !priceIsInflatedThenDiscounted(p))
     );
 
     let picked;
     let reasoning = null;
     let mode = 'simulated';
 
-    if (liveMode) {
+    if (demo?.agentPickId) {
+      picked = eligible.find((product) => product.id === demo.agentPickId);
+      reasoning = demo.agentReasoning;
+      mode = 'pitch demo';
+    } else if (liveMode) {
       try {
         const live = await fetchLiveAgentPick(mandate, eligible);
         picked = eligible.find((p) => p.id === live.pickedId) || eligible[0];
@@ -125,15 +129,23 @@ function App() {
     }
 
     if (!picked) {
-      const sim = runAgentPurchase(CATALOG, intent, bias / 100);
+      const sim = runAgentPurchase(CATALOG, intentToRun, bias / 100);
       picked = sim.picked;
     }
 
-    const audit = auditPurchase(CATALOG, intent, picked, reasoning);
+    const audit = auditPurchase(CATALOG, intentToRun, picked, reasoning);
     const entry = { agentPick: picked, audit, bias, mode, mandate, at: new Date().toISOString() };
     setResult(entry);
     setHistory((h) => [entry, ...h].slice(0, 20));
     setRunning(false);
+  }
+
+  function handleSelectPreset(preset) {
+    setIntent({ ...preset.intent });
+    if (preset.demo?.autoRun) {
+      setBias(preset.demo.bias ?? bias);
+      handleRun(preset.intent, preset.demo);
+    }
   }
 
   return (
@@ -150,7 +162,7 @@ function App() {
           <span className="wordmark-mark" aria-hidden="true">A</span>
           <span>AEGIS</span>
         </div>
-        <p className="site-tagline">Agents should honor<br />your <em>intent.</em></p>
+        <p className="site-tagline">Payment protocols verify an agent was <em>authorized</em> to buy.<br />Aegis verifies it actually <em>honored</em> what you asked for.</p>
         <p className="hero-copy">Aegis makes autonomous purchases accountable. Set a mandate, let an agent act, and get independent proof that it followed your rules.</p>
         <label className="mode-toggle mono">
           <input
@@ -196,6 +208,7 @@ function App() {
           bias={bias}
           setBias={setBias}
           onRun={handleRun}
+          onSelectPreset={handleSelectPreset}
           running={running}
           liveMode={liveMode}
         />
@@ -264,7 +277,13 @@ function App() {
                   {h.audit.verdict}
                 </span>
                 <span>{h.agentPick.name}</span>
-                <span>{h.mode === 'live' ? 'live agent' : `sim bias ${h.bias}%`}</span>
+                <span>
+                  {h.mode === 'live'
+                    ? 'live agent'
+                    : h.mode === 'pitch demo'
+                      ? 'pitch demo'
+                      : `sim bias ${h.bias}%`}
+                </span>
                 <span className="history-time mono">{formatRelativeTime(h.at)}</span>
               </button>
             ))}
